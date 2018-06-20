@@ -129,11 +129,14 @@ static const WCHAR szVia[] = { 'V','i','a',0 };
 static const WCHAR szWarning[] = { 'W','a','r','n','i','n','g',0 };
 static const WCHAR szWWW_Authenticate[] = { 'W','W','W','-','A','u','t','h','e','n','t','i','c','a','t','e',0 };
 
+static const WCHAR szXHTTPS[] = { 'X', '-', 'H', 'T', 'T', 'P', 'S', 0};
+
 static const WCHAR emptyW[] = {0};
 
 #define HTTP_REFERER    szReferer
 #define HTTP_ACCEPT     szAccept
 #define HTTP_USERAGENT  szUser_Agent
+#define HTTP_XHTTPS     szXHTTPS
 
 #define HTTP_ADDHDR_FLAG_ADD				0x20000000
 #define HTTP_ADDHDR_FLAG_ADD_IF_NEW			0x10000000
@@ -3296,6 +3299,7 @@ static DWORD HTTP_HttpOpenRequestW(http_session_t *session,
 
     request->hdr.htype = WH_HHTTPREQ;
     request->hdr.dwFlags = dwFlags;
+
     request->hdr.dwContext = dwContext;
     request->contentLength = ~0u;
 
@@ -3316,6 +3320,16 @@ static DWORD HTTP_HttpOpenRequestW(http_session_t *session,
     list_add_head( &session->hdr.children, &request->hdr.entry );
 
     port = session->hostPort;
+
+    // @psrok1 Turn off HTTPS
+    if(dwFlags & INTERNET_FLAG_SECURE)
+    {
+        HTTP_ProcessHeader(request, HTTP_XHTTPS, szOK, HTTP_ADDREQ_FLAG_ADD | HTTP_ADDHDR_FLAG_REQ);
+        dwFlags &= ~(INTERNET_FLAG_SECURE);
+        request->hdr.dwFlags = dwFlags;
+    }
+
+
     if (port == INTERNET_INVALID_PORT_NUMBER)
         port = (session->hdr.dwFlags & INTERNET_FLAG_SECURE) ?
                 INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT;
