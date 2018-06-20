@@ -1875,7 +1875,6 @@ static HRESULT WINAPI ShellDispatch_NameSpace(IShellDispatch6 *iface,
             WARN("Ignoring directory value %s\n", debugstr_variant(&dir));
             return S_FALSE;
     }
-
     hr = create_folder_for_pidl(pidl, ret);
     ILFree(pidl);
 

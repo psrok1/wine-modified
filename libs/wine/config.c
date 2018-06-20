@@ -264,24 +264,28 @@ static void init_paths(void)
     const char *user = NULL;
     const char *prefix = getenv( "WINEPREFIX" );
 
-#ifdef HAVE_GETPWUID
-    char uid_str[32];
-    struct passwd *pwd = getpwuid( getuid() );
-
-    if (pwd)
-    {
-        user = pwd->pw_name;
-        if (!home) home = pwd->pw_dir;
-    }
-    if (!user)
-    {
-        sprintf( uid_str, "%lu", (unsigned long)getuid() );
-        user = uid_str;
-    }
-#else  /* HAVE_GETPWUID */
+    // @psrok1: don't try to be so smart :P
     if (!(user = getenv( "USER" )))
         fatal_error( "cannot determine your user name, set the USER environment variable\n" );
-#endif  /* HAVE_GETPWUID */
+
+//#ifdef HAVE_GETPWUID
+//    char uid_str[32];
+//    struct passwd *pwd = getpwuid( getuid() );
+//
+//    if (pwd)
+//    {
+//        user = pwd->pw_name;
+//        if (!home) home = pwd->pw_dir;
+//    }
+//    if (!user)
+//    {
+//        sprintf( uid_str, "%lu", (unsigned long)getuid() );
+//        user = uid_str;
+//    }
+//#else  /* HAVE_GETPWUID */
+//    if (!(user = getenv( "USER" )))
+//        fatal_error( "cannot determine your user name, set the USER environment variable\n" );
+//#endif  /* HAVE_GETPWUID */
     user_name = xstrdup( user );
 
     /* build config_dir */

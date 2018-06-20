@@ -1999,7 +1999,9 @@ static HRESULT WINAPI ServerXMLHTTPRequest_setOption(IServerXMLHTTPRequest *ifac
 {
     serverhttp *This = impl_from_IServerXMLHTTPRequest( iface );
     FIXME("(%p)->(%d %s): stub\n", This, option, debugstr_variant(&value));
-    return E_NOTIMPL;
+    //@psrok1: now it is implemented :))
+    //return E_NOTIMPL;
+    return S_OK;
 }
 
 static const struct IServerXMLHTTPRequestVtbl ServerXMLHTTPRequestVtbl =
