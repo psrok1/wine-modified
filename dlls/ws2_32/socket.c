@@ -3409,19 +3409,10 @@ static int do_connect(int fd, const struct WS_sockaddr* name, int namelen)
         TRACE("Redirect AF_INET socket to fakenet");
         struct sockaddr_in *in4 = (struct sockaddr_in*) &uaddr;
         in4->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-        if(in4->sin_port != htons(22))
+        if(in4->sin_port != htons(53))
         {
-            in4->sin_port != htons(80);
+            in4->sin_port = htons(80);
         }
-        //struct sockaddr_in *in4 = (struct sockaddr_in*) &uaddr;
-        //if (memcmp(&in4->sin_addr, magic_loopback_addr, 4) == 0)
-        //{
-        //    /* Trying to connect to magic replace-loopback address,
-        //        * assuming we really want to connect to localhost */
-        //    TRACE("Trying to connect to magic IP address, using "
-        //            "INADDR_LOOPBACK instead.\n");
-        //    in4->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-        //}
     }
 
     if (connect(fd, &uaddr.addr, uaddrlen) == 0)
